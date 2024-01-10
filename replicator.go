@@ -100,19 +100,19 @@ func (tr *TrafficReplicator) Stop() {
 //	None
 func (tr *TrafficReplicator) runUDP() {
 	for _, port := range tr.Ports {
-		addr, err := net.ResolveUDPAddr("udp", fmt.Sprintf(":%d", port))
-		if err != nil {
-			fmt.Println("ResolveUDPAddr failed:", err)
-			continue
-		}
-
-		conn, err := net.ListenUDP("udp", addr)
-		if err != nil {
-			fmt.Println("ListenUDP failed:", err)
-			continue
-		}
-
-		go tr.handleUDPConnection(conn, port)
+		go func(port int) {
+			addr, err := net.ResolveUDPAddr("udp", fmt.Sprintf(":%d", port))
+			if err != nil {
+				fmt.Println("ResolveUDPAddr failed:", err)
+				return
+			}
+			conn, err := net.ListenUDP("udp", addr)
+			if err != nil {
+				fmt.Println("ListenUDP failed:", err)
+				return
+			}
+			go tr.handleUDPConnection(conn, port)
+		}(port)
 	}
 }
 
