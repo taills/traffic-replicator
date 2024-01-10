@@ -127,23 +127,33 @@ func (tr *TrafficReplicator) runUDP() {
 //	None
 func (tr *TrafficReplicator) runTCP() {
 	for _, port := range tr.Ports {
-		addr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf(":%d", port))
-		if err != nil {
-			fmt.Println("ResolveTCPAddr failed:", err)
-			continue
-		}
+		go func(port int) {
+			addr, err := net.ResolveTCPAddr("tcp", fmt.Sprintf(":%d", port))
+			if err != nil {
+				fmt.Println("ResolveTCPAddr failed:", err)
+				return
+			}
+			fmt.Println("Listening on TCP port", port)
+			listener, err := net.ListenTCP("tcp", addr)
+			if err != nil {
+				fmt.Println("ListenTCP failed:", err)
+				return
+			}
+			for {
+				select {
+				case <-tr.exitSignal:
+					return
+				default:
+					conn, err := listener.AcceptTCP()
+					if err != nil {
+						fmt.Println("AcceptTCP failed:", err)
+						return
+					}
+					fmt.Println("Accepted TCP connection")
+					go tr.handleTCPConnection(conn, port)
+				}
+			}
+		}(port)
 
-		listener, err := net.ListenTCP("tcp", addr)
-		if err != nil {
-			fmt.Println("ListenTCP failed:", err)
-			continue
-		}
-		conn, err := listener.AcceptTCP()
-		if err != nil {
-			fmt.Println("AcceptTCP failed:", err)
-			continue
-		}
-
-		go tr.handleTCPConnection(conn, port)
 	}
 }
