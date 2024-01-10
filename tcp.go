@@ -15,6 +15,7 @@ import (
 //
 //	None
 func (tr *TrafficReplicator) handleTCPConnection(conn *net.TCPConn, port int) {
+	defer conn.Close()
 	var connMap = make(map[string]*net.TCPConn)
 	for _, targetIP := range tr.ReplicateTo {
 		destAddr := fmt.Sprintf("%s:%d", targetIP, port)
@@ -29,6 +30,7 @@ func (tr *TrafficReplicator) handleTCPConnection(conn *net.TCPConn, port int) {
 			fmt.Println("DialTCP failed:", err)
 			continue
 		}
+		defer destConn.Close()
 		connMap[targetIP] = destConn
 	}
 
