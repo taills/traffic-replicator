@@ -1,3 +1,6 @@
+before:
+  hooks:
+    - go mod tidy
 builds:
   - id: "traffic-replicator"
     main: cmd/traffic-replicator/main.go
@@ -21,9 +24,7 @@ archives:
       {{- if eq .Arch "386" }}i386{{ else if eq .Arch "amd64" }}x86_64{{ else }}{{ .Arch }}{{ end }}
 
 checksum:
-  name_template: 'checksums.txt'
-snapshot:
-  name_template: "{{ .Tag }}-next"
+  algorithm: sha256
 changelog:
   sort: asc
   filters:
