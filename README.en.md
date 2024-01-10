@@ -19,7 +19,7 @@ TCP is two-way replication. After the port receives data, it will copy the data 
 #### 1.1 Download and install using go
 
 ```shell
-go install github.com/taills/traffic-replicator/cmd/ipcopy@latest
+go install github.com/taills/traffic-replicator/cmd/traffic-replicator@latest
 ```
 
 #### 1.2 Use binary files
@@ -31,17 +31,17 @@ Download the binary file for the corresponding platform from https://github.com/
 Copy the UDP traffic of ports 53, 514-550 on this machine to two hosts, 192.168.0.22 and 192.168.0.23, and output the data packets in ASCII format.
 
 ```shell
-ipcopy -targets 192.168.0.22,192.168.0.23 -ports 53,514-550 -udp -ascii
+traffic-replicator -targets 192.168.0.22,192.168.0.23 -ports 53,514-550 -udp -ascii
 ```
 
 Copy the TCP traffic of port 1024 on this machine to 10.100.0.171.
 
 ```shell
-ipcopy -targets 10.100.0.171 -ports 1024 -tcp -ascii
+traffic-replicator -targets 10.100.0.171 -ports 1024 -tcp -ascii
 ```
 
 ### 3. Help
 
 ```shell
-ipcopy -h
+traffic-replicator -h
 ```

@@ -17,7 +17,7 @@ TCP为双向复制，端口收到数据后，会将数据复制到所有的目�
 #### 1.1 使用 go 下载安装
 
 ```shell
-go install github.com/taills/traffic-replicator/cmd/ipcopy@latest
+go install github.com/taills/traffic-replicator/cmd/traffic-replicator@latest
 ```
 
 #### 1.2 使用二进制文件
@@ -30,17 +30,17 @@ go install github.com/taills/traffic-replicator/cmd/ipcopy@latest
 复制本机53端口，514-550端口的UDP流量到 192.168.0.22 和 192.168.0.23 两台主机上，并以ASCII格式输出数据包。
 
 ```shell
-ipcopy -targets 192.168.0.22,192.168.0.23 -ports 53,514-550 -udp -ascii
+traffic-replicator -targets 192.168.0.22,192.168.0.23 -ports 53,514-550 -udp -ascii
 ```
 
 复制本机的 1024 端口的TCP流量到 10.100.0.171
 
 ```shell
-ipcopy -targets 10.100.0.171 -ports 1024 -tcp -ascii
+traffic-replicator -targets 10.100.0.171 -ports 1024 -tcp -ascii
 ```
 
 ### 3. 帮助
 
 ```shell
-ipcopy -h
+traffic-replicator -h
 ```
